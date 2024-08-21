@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 const apiKey = process.env.EXPO_PUBLIC_SPOONACULAR_KEY;
 
 const findByNutrients = async (action, quantMin, quantMax, number) => {
@@ -7,10 +5,10 @@ const findByNutrients = async (action, quantMin, quantMax, number) => {
 
     try {
         const response = await fetch(url);
-        const json = await response.json();
-        return json;
-    } catch (error) {
-        console.error('Error fetching data:', error);
+        const data = await response.json();
+        return data;
+    } catch (e) {
+        console.error('Fetching error:', e);
         return [];
     }
 };
@@ -22,10 +20,25 @@ const findHealthnessRecipes = async (diet, maxReadyTime) => {
         const response = await fetch(url);
         const data = await response.json();
         return data.results;
-    } catch (error) {
-        console.error('Error fetching data:', error);
+    } catch (e) {
+        console.error('Fetching error:', e);
         return [];
     }
 };
 
-export { findByNutrients, findHealthnessRecipes };
+const getRecipeDetailsbyId = async (recipeid) => {
+    const url = `https://api.spoonacular.com/recipes/${recipeid}/information?apiKey=${apiKey}&includeNutrition=true`;
+    console.log(url);
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (e) {
+        console.error('Fetching error:', e);
+        return [];
+    }
+}
+
+export { findByNutrients, findHealthnessRecipes, getRecipeDetailsbyId };
